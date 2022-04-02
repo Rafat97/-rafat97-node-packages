@@ -1,6 +1,6 @@
 {
   "name": "@rafat97/exceptionhandler",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "All types exception handler classes defination ",
   "main": "src/index.ts",
   "scripts": {
