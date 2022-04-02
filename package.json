@@ -20,6 +20,8 @@
 		"lint": "lerna run lint",
 		"build": "lerna run build --stream",
 		"version": "lerna version --conventional-commits",
+		"publish:patch": "lerna publish patch --exact --no-verify-access",
+
 		"publish:1.0-stable": "lerna publish --conventional-commits --yes --dist-tag=stable-1.0 --message 'Publish stable [ci skip]' --no-verify-access",
 		"publish:release": "lerna publish --conventional-commits --yes --message 'Publish release [ci skip]' --no-verify-access",
 		"publish:beta": "lerna publish --canary --force-publish \"*\" --yes --dist-tag=beta --preid=beta --exact --no-verify-access",
