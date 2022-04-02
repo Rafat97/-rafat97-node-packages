@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v2
 
       - name: Change directory to src/exceptionHandler
-        run: cd src/exceptionHandler
+        run: cd packages/exceptionHandler
 
       - name: Package.json package version patch
         run: npm run version:patch
