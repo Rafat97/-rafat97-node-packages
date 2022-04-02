@@ -20,12 +20,11 @@ jobs:
             cd packages/exceptionHandler
             pwd
             npm run version:patch
-
-      - name: Publish package
-        run: npm run publish:npm
+            npm run publish:npm
 
       - name: Git version & config
         run: |
+            pwd
             echo "Git version"
             git --version
             echo "Set config"
@@ -36,6 +35,7 @@ jobs:
 
       - name: Commit package version
         run: |
+            pwd
             git status
             git add .
             git status
