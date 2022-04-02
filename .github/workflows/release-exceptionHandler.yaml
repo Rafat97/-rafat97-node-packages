@@ -18,14 +18,14 @@ jobs:
       - name: Install yarn
         run: npm install -g yarn
 
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Lerna version
         run: yarn lerna version --yes
 
       - name: Change directory to src/exceptionHandler
         run: cd src/exceptionHandler
-
-      - name: Install dependencies
-        run: yarn install
 
       - name: Publish package
         run: yarn run publish:npm
