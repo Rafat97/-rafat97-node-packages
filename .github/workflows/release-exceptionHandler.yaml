@@ -1,4 +1,4 @@
-name: Release @rafat97/exceptionHandler typescript package
+name: Publish @rafat97/exceptionHandler typescript package
 
 on:
   workflow_dispatch:
@@ -15,20 +15,33 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
 
-      - name: Install yarn
-        run: npm install -g yarn
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Lerna version
-        run: yarn lerna version --yes
-
       - name: Change directory to src/exceptionHandler
         run: cd src/exceptionHandler
 
+      - name: Package.json package version patch
+        run: npm run version:patch
+
       - name: Publish package
-        run: yarn run publish:npm
+        run: npm run publish:npm
 
+      - name: Change directory to root
+        run: cd ../../..
 
+      - name: Git version & config
+        run: |
+            echo "Git version"
+            git --version
+            echo "Set config"
+            git config --local user.email "rafathaque.bot@gmail.com"
+            git config --local user.name  "rafat97bot"
+            echo "Git config"
+            git config --list
+
+      - name: Commit package version
+        run: |
+            git status
+            git add .
+            git status
+            git commit -m "🤖 AiS_Packages repo Update by ${{ github.actor }}"
+            git push
 

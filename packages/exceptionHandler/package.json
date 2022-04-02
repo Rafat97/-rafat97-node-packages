@@ -11,6 +11,9 @@
 	"scripts": {
 		"build": "tsc",
 		"publish:npm": "npm run build && npm publish",
+    "version:patch": "npm version patch",
+    "version:major": "npm version major",
+    "version:minor": "npm version minor",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
