@@ -1,6 +1,6 @@
 {
 	"name": "@rafat97/exceptionhandler",
-	"version": "0.0.3",
+	"version": "0.0.0",
 	"description": "All types exception handler classes definition ",
 	"main": "./lib/index.js",
 	"module": "./lib/index.js",
