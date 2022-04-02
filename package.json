@@ -1,24 +1,28 @@
 {
-  "name": "rafat97-node-packages",
-  "private": true,
-  "devDependencies": {
-    "lerna": "^4.0.0"
-  },
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
-  "scripts": {
-    "test": "lerna run test --stream",
-    "bootstrap": "lerna bootstrap",
-    "build:watch": "concurrently 'lerna run build:cjs:watch --parallel' 'lerna run build:esm:watch --parallel' --raw",
+	"name": "rafat97-node-packages",
+	"private": true,
+	"devDependencies": {
+		"lerna": "^4.0.0"
+	},
+	"workspaces": {
+		"packages": [
+			"packages/*"
+		]
+	},
+	"scripts": {
+		"test": "lerna run test --stream",
+		"bootstrap": "lerna bootstrap",
+		"build:watch": "concurrently 'lerna run build:cjs:watch --parallel' 'lerna run build:esm:watch --parallel' --raw",
 		"build:esm:watch": "lerna run build:esm:watch --parallel",
 		"build:cjs:watch": "lerna run build:cjs:watch --parallel",
 		"clean": "lerna run clean --parallel",
 		"format": "lerna run format",
 		"lint": "lerna run lint",
-    "build": "lerna run build --stream",
-		"publish": "lerna publish"
-  }
+		"build": "lerna run build --stream",
+		"publish": "lerna publish --canary --force-publish \"*\" --yes --dist-tag=unstable --preid=unstable --exact --no-verify-access"
+	},
+	"dependencies": {
+		"@types/lodash": "^4.14.181",
+		"@types/node": "^17.0.23"
+	}
 }

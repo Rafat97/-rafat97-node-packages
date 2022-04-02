@@ -1,29 +1,30 @@
 {
-  "name": "@rafat97/exceptionhandler",
-  "version": "0.0.1",
-  "description": "All types exception handler classes defination ",
-  "main": "src/index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Rafat97/node-packages.git"
-  },
-  "keywords": [
-    "exception",
-    "error",
-    "express",
-    "fastapi",
-    "node"
-  ],
-  "author": "rafat97",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Rafat97/node-packages/issues"
-  },
-  "homepage": "https://github.com/Rafat97/node-packages#readme",
-  "dependencies": {
-    "ajv": "^8.11.0"
-  }
+	"name": "@rafat97/exceptionhandler",
+	"version": "0.0.1",
+	"description": "All types exception handler classes definition ",
+	"main": "src/index.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Rafat97/node-packages.git"
+	},
+	"keywords": [
+		"exception",
+		"error",
+		"express",
+		"fastapi",
+		"node"
+	],
+	"author": "rafat97",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Rafat97/node-packages/issues"
+	},
+	"homepage": "https://github.com/Rafat97/node-packages#readme",
+	"dependencies": {
+		"ajv": "^8.11.0"
+	},
+	"gitHead": "e2dd41d5852833db2d3ba6d867d9e7c52884da0f"
 }
