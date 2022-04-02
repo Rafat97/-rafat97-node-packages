@@ -15,17 +15,14 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
 
-      - name: Change directory to src/exceptionHandler
-        run: cd packages/exceptionHandler
-
       - name: Package.json package version patch
-        run: npm run version:patch
+        run: |
+            cd packages/exceptionHandler
+            pwd
+            npm run version:patch
 
       - name: Publish package
         run: npm run publish:npm
-
-      - name: Change directory to root
-        run: cd ../../..
 
       - name: Git version & config
         run: |
