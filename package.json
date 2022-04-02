@@ -20,7 +20,6 @@
 		"lint": "lerna run lint",
 		"build": "lerna run build --stream",
 		"version": "lerna version --conventional-commits",
-		"publish:release": "lerna publish --conventional-commits --yes --message 'Publish [ci skip]' --no-verify-access",
 		"publish:beta": "lerna publish --canary --force-publish \"*\" --yes --dist-tag=beta --preid=beta --exact --no-verify-access",
 		"publish:unstable": "lerna publish --canary --force-publish \"*\" --yes --dist-tag=unstable --preid=unstable --exact --no-verify-access"
 	},
