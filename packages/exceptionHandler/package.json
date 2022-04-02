@@ -1,6 +1,6 @@
 {
 	"name": "@rafat97/exceptionhandler",
-	"version": "0.0.2-unstable.1+584f7b2",
+	"version": "0.0.2",
 	"description": "All types exception handler classes definition ",
 	"main": "./lib/index.js",
 	"module": "./lib/index.js",
@@ -9,6 +9,7 @@
 		"access": "public"
 	},
 	"scripts": {
+		"build": "tsc",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -31,5 +32,5 @@
 	"dependencies": {
 		"ajv": "^8.11.0"
 	},
-	"gitHead": "584f7b24c02be8c07de59c52796e48e0c6de6d63"
+	"gitHead": "caa3a48ebac561ccd819b5876f46cea444375d5c"
 }
