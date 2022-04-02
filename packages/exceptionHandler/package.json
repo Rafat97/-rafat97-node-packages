@@ -1,6 +1,6 @@
 {
 	"name": "@rafat97/exceptionhandler",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"description": "All types exception handler classes definition ",
 	"main": "./lib/index.js",
 	"module": "./lib/index.js",
@@ -11,9 +11,9 @@
 	"scripts": {
 		"build": "tsc",
 		"publish:npm": "npm run build && npm publish",
-    "version:patch": "npm version patch",
-    "version:major": "npm version major",
-    "version:minor": "npm version minor",
+		"version:patch": "npm version patch",
+		"version:major": "npm version major",
+		"version:minor": "npm version minor",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
