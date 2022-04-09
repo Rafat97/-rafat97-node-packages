@@ -1,6 +1,6 @@
 {
 	"name": "@rafat97/exceptionhandler",
-	"version": "0.0.9",
+	"version": "0.0.11",
 	"description": "All types exception handler classes definition ",
 	"main": "./lib/index.js",
 	"module": "./lib/index.js",
@@ -10,6 +10,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
+		"pac:publish": "zx ./scripts/publish.mjs",
 		"version:patch": "npm version patch",
 		"version:major": "npm version major",
 		"version:minor": "npm version minor",
