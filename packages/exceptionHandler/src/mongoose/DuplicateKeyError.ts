@@ -6,6 +6,9 @@ export class DuplicateKey extends CommonMongoServerError {
 
   constructor(message: string) {
     super(message);
+    if (message === "") {
+      this.message = "Duplicate key found";
+    }
     Object.setPrototypeOf(this, DuplicateKey.prototype);
   }
 

@@ -9,8 +9,8 @@ export class MongooseError extends CommonMongoServerError {
 
   constructor(message: string, mongoServerErrorCode: number) {
     super(message);
-    this.errorObject = this.factoryErrorHandler(mongoServerErrorCode);
     Object.setPrototypeOf(this, MongooseError.prototype);
+    this.errorObject = this.factoryErrorHandler(mongoServerErrorCode);
   }
 
   factoryErrorHandler(mongoServerErrorCode: number) {

@@ -1,6 +1,6 @@
 {
 	"name": "@rafat97/exceptionhandler",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"description": "All types exception handler classes definition ",
 	"main": "./lib/index.js",
 	"module": "./lib/index.js",
@@ -14,7 +14,7 @@
 		"version:patch": "npm version patch",
 		"version:major": "npm version major",
 		"version:minor": "npm version minor",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "jest"
 	},
 	"repository": {
 		"type": "git",
@@ -34,7 +34,16 @@
 	},
 	"homepage": "https://github.com/Rafat97/node-packages#readme",
 	"dependencies": {
+		"@types/jest": "^27.4.1",
 		"ajv": "^8.11.0"
 	},
-	"gitHead": "6c009042a9a21d694eaf1fed910cad32014fa353"
+	"gitHead": "6c009042a9a21d694eaf1fed910cad32014fa353",
+	"devDependencies": {
+		"@types/jest": "^27.4.1",
+		"jest": "^27.5.1",
+		"supertest": "^6.2.2",
+		"ts-jest": "^27.1.4",
+		"ts-node": "^10.7.0",
+		"typescript": "^4.6.3"
+	}
 }
