@@ -1,2 +1,2 @@
-# -rafat97-node-packages
-All the @rafat97 nodeJS packages
+# node-packages
+All the nodeJS utils packages
