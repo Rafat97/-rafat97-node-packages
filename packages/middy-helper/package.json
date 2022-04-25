@@ -1,6 +1,6 @@
 {
 	"name": "@rafat97/middy-helper",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "All types helper for middy",
 	"main": "./lib/index.js",
 	"module": "./lib/index.js",
@@ -31,7 +31,8 @@
 	},
 	"homepage": "https://github.com/Rafat97/node-packages#readme",
 	"dependencies": {
-    "@middy/util": "^2.5.4"
+		"@middy/util": "^2.5.4",
+		"@rafat97/exceptionhandler": "^0.0.15"
 	},
 	"gitHead": "6c009042a9a21d694eaf1fed910cad32014fa353",
 	"devDependencies": {
