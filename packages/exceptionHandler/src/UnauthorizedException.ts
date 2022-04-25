@@ -1,7 +1,7 @@
-import { CustomError } from "./CustomError";
+import { CustomError, CustomErrorObject } from "./CustomError";
 
 export class UnauthorizedException extends CustomError {
-  statusCode = 403;
+  statusCode = 401;
 
   constructor(public message: string = "Unauthorized") {
     super(message);
@@ -12,7 +12,7 @@ export class UnauthorizedException extends CustomError {
     return this.statusCode;
   }
 
-  serializeErrors() {
+  serializeErrors(): CustomErrorObject {
     return { message: this.message, details: [] };
   }
 }

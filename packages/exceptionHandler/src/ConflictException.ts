@@ -1,4 +1,4 @@
-import { CustomError } from "./CustomError";
+import { CustomError, CustomErrorObject } from "./CustomError";
 
 export class ConflictException extends CustomError {
   statusCode = 409;
@@ -12,7 +12,7 @@ export class ConflictException extends CustomError {
     return this.statusCode;
   }
 
-  serializeErrors() {
+  serializeErrors(): CustomErrorObject {
     return { message: this.message, details: [] };
   }
 }

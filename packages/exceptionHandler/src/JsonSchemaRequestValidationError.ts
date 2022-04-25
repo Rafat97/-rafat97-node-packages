@@ -1,4 +1,4 @@
-import { CustomError } from "./CustomError";
+import { CustomError, CustomErrorObject } from "./CustomError";
 import { ErrorObject } from "ajv";
 
 export class JsonSchemaRequestValidationError extends CustomError {
@@ -16,7 +16,7 @@ export class JsonSchemaRequestValidationError extends CustomError {
     return this.statusCode;
   }
 
-  serializeErrors() {
+  serializeErrors(): CustomErrorObject {
     return { message: this.message, details: this.errors };
   }
 }

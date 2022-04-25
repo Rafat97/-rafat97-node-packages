@@ -13,9 +13,9 @@ describe("UnauthorizedException", () => {
     expect(result).toEqual({ message: "Not Authorized", details: [] });
   });
 
-  it("should return status code 403 ", () => {
+  it("should return status code 401 ", () => {
     const wrapper = new UnauthorizedException("Not Authorized");
     const result = wrapper.getStatusCode();
-    expect(result).toBe(403);
+    expect(result).toBe(401);
   });
 });

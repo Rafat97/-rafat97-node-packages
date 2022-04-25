@@ -1,4 +1,4 @@
-import { CustomError } from "./CustomError";
+import { CustomError, CustomErrorObject } from "./CustomError";
 
 export class UnprocessableEntityValidation extends CustomError {
   statusCode = 422;
@@ -12,7 +12,7 @@ export class UnprocessableEntityValidation extends CustomError {
     return this.statusCode;
   }
 
-  serializeErrors() {
+  serializeErrors(): CustomErrorObject {
     return { message: this.message, details: [] };
   }
 }
