@@ -8,6 +8,10 @@ export class NotFoundValidation extends CustomError {
     Object.setPrototypeOf(this, NotFoundValidation.prototype);
   }
 
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
   serializeErrors() {
     return { message: this.message, details: [] };
   }

@@ -8,6 +8,10 @@ export class UnauthorizedException extends CustomError {
     Object.setPrototypeOf(this, UnauthorizedException.prototype);
   }
 
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
   serializeErrors() {
     return { message: this.message, details: [] };
   }

@@ -8,6 +8,10 @@ export class UnprocessableEntityValidation extends CustomError {
     Object.setPrototypeOf(this, UnprocessableEntityValidation.prototype);
   }
 
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
   serializeErrors() {
     return { message: this.message, details: [] };
   }

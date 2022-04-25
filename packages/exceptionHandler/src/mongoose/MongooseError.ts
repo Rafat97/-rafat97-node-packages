@@ -1,11 +1,13 @@
 import { UndefinedError } from "./UndefinedError";
 import { DuplicateKey } from "./DuplicateKeyError";
-import { CommonMongoServerError } from "./CommonMongoServerError";
-
+import {
+  CommonMongoServerError,
+  MongooseCustomErrorObject,
+} from "./CommonMongoServerError";
 export class MongooseError extends CommonMongoServerError {
   statusCode = 409;
   mongoServerErrorCode = -1;
-  errorObject = { message: "None", details: [] };
+  errorObject: CommonMongoServerError;
 
   constructor(message: string, mongoServerErrorCode: number) {
     super(message);
@@ -13,16 +15,24 @@ export class MongooseError extends CommonMongoServerError {
     this.errorObject = this.factoryErrorHandler(mongoServerErrorCode);
   }
 
-  factoryErrorHandler(mongoServerErrorCode: number) {
+  factoryErrorHandler(mongoServerErrorCode: number): CommonMongoServerError {
     switch (mongoServerErrorCode) {
       case 11000:
-        return new DuplicateKey(this.message).serializeErrors();
+        return new DuplicateKey(this.message);
       default:
-        return new UndefinedError().serializeErrors();
+        return new UndefinedError();
     }
   }
 
-  serializeErrors() {
-    return this.errorObject;
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
+  getMongoDbErrorCode(): number {
+    return this.errorObject.getMongoDbErrorCode();
+  }
+
+  serializeErrors(): MongooseCustomErrorObject {
+    return this.errorObject.serializeErrors();
   }
 }

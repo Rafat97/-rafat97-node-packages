@@ -8,6 +8,10 @@ export class BadRequestValidation extends CustomError {
     Object.setPrototypeOf(this, BadRequestValidation.prototype);
   }
 
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
   serializeErrors() {
     return { message: this.message, details: [] };
   }

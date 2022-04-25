@@ -1,4 +1,4 @@
-interface CustomErrorObject {
+export interface CustomErrorObject {
   message: string;
   details?: Object[] | null | undefined;
 }
@@ -11,6 +11,7 @@ export abstract class CustomError extends Error {
 
     Object.setPrototypeOf(this, CustomError.prototype);
   }
+  abstract getStatusCode(): number;
 
   abstract serializeErrors(): CustomErrorObject;
 }

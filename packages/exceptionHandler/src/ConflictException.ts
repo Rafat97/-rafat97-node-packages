@@ -8,6 +8,10 @@ export class ConflictException extends CustomError {
     Object.setPrototypeOf(this, ConflictException.prototype);
   }
 
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
   serializeErrors() {
     return { message: this.message, details: [] };
   }

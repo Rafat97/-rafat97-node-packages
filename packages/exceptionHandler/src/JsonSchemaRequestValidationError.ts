@@ -12,6 +12,10 @@ export class JsonSchemaRequestValidationError extends CustomError {
     Object.setPrototypeOf(this, JsonSchemaRequestValidationError.prototype);
   }
 
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
   serializeErrors() {
     return { message: this.message, details: this.errors };
   }

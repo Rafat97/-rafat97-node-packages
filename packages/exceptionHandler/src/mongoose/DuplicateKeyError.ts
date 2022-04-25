@@ -1,4 +1,7 @@
-import { CommonMongoServerError } from "./CommonMongoServerError";
+import {
+  CommonMongoServerError,
+  MongooseCustomErrorObject,
+} from "./CommonMongoServerError";
 
 export class DuplicateKey extends CommonMongoServerError {
   statusCode = 409;
@@ -12,7 +15,19 @@ export class DuplicateKey extends CommonMongoServerError {
     Object.setPrototypeOf(this, DuplicateKey.prototype);
   }
 
-  serializeErrors() {
-    return { message: this.message, details: [] };
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
+  getMongoDbErrorCode(): number {
+    return this.mongoServerErrorCode;
+  }
+
+  serializeErrors(): MongooseCustomErrorObject {
+    return {
+      message: this.message,
+      details: [],
+      mongoServerErrorCode: this.mongoServerErrorCode,
+    };
   }
 }

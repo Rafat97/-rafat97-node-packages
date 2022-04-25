@@ -1,10 +1,8 @@
-import { CustomError } from "../CustomError";
+import { CustomError, CustomErrorObject } from "../CustomError";
 
-interface CustomErrorObject {
-  message: string;
-  details?: Object[] | null | undefined;
+export interface MongooseCustomErrorObject extends CustomErrorObject {
+  mongoServerErrorCode: number;
 }
-
 export abstract class CommonMongoServerError extends CustomError {
   abstract statusCode: number;
   abstract mongoServerErrorCode: number;
@@ -15,5 +13,7 @@ export abstract class CommonMongoServerError extends CustomError {
     Object.setPrototypeOf(this, CommonMongoServerError.prototype);
   }
 
-  abstract serializeErrors(): CustomErrorObject;
+  abstract getMongoDbErrorCode(): number;
+
+  abstract serializeErrors(): MongooseCustomErrorObject;
 }

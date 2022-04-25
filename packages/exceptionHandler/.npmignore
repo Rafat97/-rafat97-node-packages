@@ -1,3 +1,4 @@
 src/
 scripts/
 __tests__/
+coverage/

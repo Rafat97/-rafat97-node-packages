@@ -1,4 +1,7 @@
-import { CommonMongoServerError } from "./CommonMongoServerError";
+import {
+  CommonMongoServerError,
+  MongooseCustomErrorObject,
+} from "./CommonMongoServerError";
 
 export class UndefinedError extends CommonMongoServerError {
   statusCode = 409;
@@ -10,7 +13,19 @@ export class UndefinedError extends CommonMongoServerError {
     Object.setPrototypeOf(this, UndefinedError.prototype);
   }
 
-  serializeErrors() {
-    return { message: this.message, details: [] };
+  getStatusCode(): number {
+    return this.statusCode;
+  }
+
+  getMongoDbErrorCode(): number {
+    return this.mongoServerErrorCode;
+  }
+
+  serializeErrors(): MongooseCustomErrorObject {
+    return {
+      message: this.message,
+      details: [],
+      mongoServerErrorCode: this.mongoServerErrorCode,
+    };
   }
 }
