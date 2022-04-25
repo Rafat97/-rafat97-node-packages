@@ -1,0 +1,46 @@
+{
+	"name": "@rafat97/middy-helper",
+	"version": "0.0.0",
+	"description": "All types helper for middy",
+	"main": "./lib/index.js",
+	"module": "./lib/index.js",
+	"typings": "./lib/index.d.ts",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsc",
+		"pac:publish": "zx ./scripts/publish.mjs",
+		"test": "jest  --coverage"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Rafat97/node-packages.git"
+	},
+	"keywords": [
+		"exception",
+		"error",
+		"express",
+		"fastapi",
+		"node"
+	],
+	"author": "rafat97",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Rafat97/node-packages/issues"
+	},
+	"homepage": "https://github.com/Rafat97/node-packages#readme",
+	"dependencies": {
+    "@middy/util": "^2.5.4"
+	},
+	"gitHead": "6c009042a9a21d694eaf1fed910cad32014fa353",
+	"devDependencies": {
+		"@middy/core": "^2.5.7",
+		"@types/jest": "^27.4.1",
+		"jest": "^27.5.1",
+		"supertest": "^6.2.2",
+		"ts-jest": "^27.1.4",
+		"ts-node": "^10.7.0",
+		"typescript": "^4.6.3"
+	}
+}
