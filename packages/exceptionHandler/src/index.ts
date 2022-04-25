@@ -6,3 +6,4 @@ export * from "./CustomError";
 export * from "./ConflictException";
 export * from "./mongoose/CommonMongoServerError";
 export * from "./mongoose/MongooseError";
+export * from "./UnauthorizedException";

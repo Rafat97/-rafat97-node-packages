@@ -1,4 +1,4 @@
-import { MongooseError } from "../index";
+import { MongooseError } from "../src/index";
 
 describe("MongooseError", () => {
   it("should return Undefined Error ", () => {
