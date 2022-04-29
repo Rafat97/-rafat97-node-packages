@@ -106,4 +106,75 @@ describe("ErrorHandlerMiddleware", () => {
       JSON.stringify({ message: "All 5xx error", details: [] })
     );
   });
+
+  it("should return header with cors value with default value", async () => {
+    const handler = middy(() => {
+      throw Error("Custom error");
+    });
+    handler.use(ErrorHandlerMiddleware());
+    const response = await handler({}, {}, {});
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toBe(JSON.stringify({ message: "Custom error" }));
+    expect(response).toHaveProperty("headers");
+    expect(response.headers).toMatchObject({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "*",
+    });
+  });
+
+  it("should return header with cors value with custom value", async () => {
+    const handler = middy(() => {
+      throw Error("Custom error");
+    });
+    handler.use(
+      ErrorHandlerMiddleware({
+        headers: {
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+        },
+      })
+    );
+    const response = await handler({}, {}, {});
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toBe(
+      JSON.stringify({
+        message: "Custom error",
+      })
+    );
+    expect(response).toHaveProperty("headers");
+    expect(response.headers).toMatchObject({
+      "Access-Control-Allow-Origin": "http://localhost:3000",
+    });
+  });
+
+  it("should return have custom option value with default header", async () => {
+    const handler = middy(() => {
+      throw Error("Custom error");
+    });
+    handler.use(
+      ErrorHandlerMiddleware({
+        test: {
+          testProperty: "http://localhost:3000",
+        },
+      })
+    );
+    const response = await handler({}, {}, {});
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toBe(
+      JSON.stringify({
+        message: "Custom error",
+      })
+    );
+    expect(response).toHaveProperty("headers");
+    expect(response.headers).toMatchObject({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "*",
+    });
+
+    expect(response).toHaveProperty("test");
+    expect(response.test).toMatchObject({
+      testProperty: "http://localhost:3000",
+    });
+  });
 });

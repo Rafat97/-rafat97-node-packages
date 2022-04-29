@@ -1,6 +1,6 @@
 {
 	"name": "@rafat97/middy-helper",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "All types helper for middy",
 	"main": "./lib/index.js",
 	"module": "./lib/index.js",
