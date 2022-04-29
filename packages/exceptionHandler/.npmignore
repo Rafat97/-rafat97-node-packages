@@ -2,3 +2,4 @@ src/
 scripts/
 __tests__/
 coverage/
+package-lock.json

@@ -18,4 +18,14 @@ describe("All5xxException.test", () => {
     const result = wrapper.getStatusCode();
     expect(result).toBe(500);
   });
+
+  it("should return the details value", () => {
+    const wrapper = new All5xxException("Server Error", 485, [
+      { test: "test" },
+    ]);
+    const result = wrapper.getStatusCode();
+    expect(result).toBe(500);
+    const result2 = wrapper.serializeErrors();
+    expect(result2.details).toEqual([{ test: "test" }]);
+  });
 });

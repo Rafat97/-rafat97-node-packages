@@ -18,4 +18,14 @@ describe("All4xxException.test", () => {
     const result = wrapper.getStatusCode();
     expect(result).toBe(404);
   });
+
+  it("should return the details value", () => {
+    const wrapper = new All4xxException("Server Error", 500, [
+      { test: "test" },
+    ]);
+    const result = wrapper.getStatusCode();
+    expect(result).toBe(404);
+    const result2 = wrapper.serializeErrors();
+    expect(result2.details).toEqual([{ test: "test" }]);
+  });
 });
