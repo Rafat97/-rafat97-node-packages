@@ -1,0 +1,68 @@
+{
+  "name": "@rafat97/express-made-easy",
+  "version": "0.0.0",
+  "description": "Made Express Easy",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "pac:publish": "zx ./scripts/publish.mjs",
+    "test": "jest  --coverage",
+    "example:ts": "ts-node ./example/ts/app.ts",
+    "example:js": "node ./example/ts/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rafat97/node-packages.git"
+  },
+  "keywords": [
+    "exception",
+    "error",
+    "express",
+    "fastapi",
+    "node"
+  ],
+  "author": "rafat97",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rafat97/node-packages/issues"
+  },
+  "homepage": "https://github.com/Rafat97/node-packages#readme",
+  "dependencies": {
+    "@rafat97/exceptionhandler": "^0.0.15",
+    "@types/ejs": "^3.1.0",
+    "@types/hbs": "^4.0.1",
+    "@types/jade": "^0.0.31",
+    "@types/pug": "^2.0.6",
+    "app-root-path": "^3.0.0",
+    "debug": "^4.3.4",
+    "ejs": "^3.1.7",
+    "express": "^4.18.1",
+    "figlet": "^1.5.2",
+    "gbs": "^1.0.9",
+    "hbs": "^4.2.0",
+    "jade": "^1.11.0",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2",
+    "winston": "^3.7.2"
+  },
+  "gitHead": "6c009042a9a21d694eaf1fed910cad32014fa353",
+  "devDependencies": {
+    "@types/app-root-path": "^1.2.4",
+    "@types/debug": "^4.1.7",
+    "@types/express": "^4.17.13",
+    "@types/figlet": "^1.5.4",
+    "@types/jest": "^27.4.1",
+    "@types/morgan": "^1.9.3",
+    "@types/winston": "^2.4.4",
+    "jest": "^27.5.1",
+    "supertest": "^6.2.2",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
+}
