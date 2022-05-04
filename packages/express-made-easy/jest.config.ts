@@ -17,5 +17,7 @@
 export default {
   preset: "ts-jest",
   testEnvironment: "node",
+  // testPathDirs: ["__tests__/"],
+  roots: ["__tests__/"],
   testPathIgnorePatterns: ["lib"],
 };

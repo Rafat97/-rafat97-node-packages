@@ -46,11 +46,17 @@ const demoRouterNotFound = function (req: any, res: any, next: any) {
 
 const config: IOptions = {
   appName: "Example Application",
+  appHost: "127.0.0.1",
+  appPort: 3000,
   appSecret: "TestSecret1234",
   logDir: `${__dirname}/extra/logs/`,
   viewDir: `${__dirname}/views/`,
   viewEngine: ViewEngine.HBS,
   staticContentDir: `${__dirname}/public/`,
+  fabIconPath: `${__dirname}/public/images/favicon.png`,
+  helmet: {
+    contentSecurityPolicy: false,
+  },
   rateLimiter: {
     // windowMs: 15 * 60 * 1000, // 15 minutes
     windowMs: 1 * 60 * 1000, // 15 minutes
@@ -72,7 +78,7 @@ const expressApp = new ExpressApplication(config)
   .addMultipleMiddleware(mid1, mid2, mid1)
   .addCookieParser()
   .addResponseTime()
-  // .addServerFavicon()
+  .addServerFavicon()
   .addMethodOverwriteHeader()
   .addFileUpload()
   .addRateLimiter()
@@ -88,7 +94,7 @@ const expressApp = new ExpressApplication(config)
   .router("/test", routerTest)
   .addErrorHandler(demoErrorHandler)
   .addMiddleware(demoRouterNotFound)
-  .startServerSync(3000);
+  .startServerSync();
 
 // default express
 // import express from "express";
