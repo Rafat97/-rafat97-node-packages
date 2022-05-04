@@ -2,14 +2,6 @@ import { ExpressApplication, IOptions, ViewEngine } from "../../src/index";
 import routerAPI from "./routes/api";
 import { routerTest } from "./routes/test";
 
-const config: IOptions = {
-  appName: "Example Application",
-  logDir: `${__dirname}/extra/logs/`,
-  viewDir: `${__dirname}/views/`,
-  viewEngine: ViewEngine.HBS,
-  staticContentDir: `${__dirname}/public/`,
-};
-
 const mid1 = function (req: any, res: any, next: any) {
   console.log("mid1");
   next();
@@ -21,9 +13,17 @@ const mid2 = function (req: any, res: any, next: any) {
 };
 
 const demoGet = (req: any, res: any, next: any) => {
-  ExpressApplication.Logger(config.logDir).error("Test Error in /");
-  throw new Error("Test Error in /");
-  res.send("Hello World!");
+  // ExpressApplication.Logger(config.logDir).error("Test Error in /");
+  // throw new Error("Test Error in /");
+  var randomNumber = Math.random().toString();
+  randomNumber = randomNumber.substring(2, randomNumber.length);
+  res.cookie("cookieName", randomNumber, {
+    maxAge: 900000,
+    // httpOnly: true,
+    domain: ".rafat.com",
+    path: "/",
+  });
+  res.json({ message: "Hello world" });
 };
 
 const demoErrorHandler = (err: any, req: any, res: any, next: any) => {
@@ -44,11 +44,45 @@ const demoRouterNotFound = function (req: any, res: any, next: any) {
   res.json({ error: "Not found" });
 };
 
+const config: IOptions = {
+  appName: "Example Application",
+  appSecret: "TestSecret1234",
+  logDir: `${__dirname}/extra/logs/`,
+  viewDir: `${__dirname}/views/`,
+  viewEngine: ViewEngine.HBS,
+  staticContentDir: `${__dirname}/public/`,
+  rateLimiter: {
+    // windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 1 * 60 * 1000, // 15 minutes
+    max: 60, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: false, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message: JSON.stringify({ message: "Too Many Request" }),
+  },
+  session: {
+    secret: "TestSecret1234",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {},
+  },
+  csrf: { cookie: true },
+};
+
 const expressApp = new ExpressApplication(config)
   .addMultipleMiddleware(mid1, mid2, mid1)
+  .addCookieParser()
+  .addResponseTime()
+  // .addServerFavicon()
+  .addMethodOverwriteHeader()
+  .addFileUpload()
+  .addRateLimiter()
   .addView()
   .addStaticContent()
   .addJSONParser()
+  .addCompression()
+  .addHelmet()
+  .addCsrf()
+  .addCors()
   .getMethod("/", demoGet)
   .router("/api", routerAPI)
   .router("/test", routerTest)

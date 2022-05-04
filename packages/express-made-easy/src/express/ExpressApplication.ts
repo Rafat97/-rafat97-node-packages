@@ -7,7 +7,22 @@ import debug from "debug";
 import appRoot from "app-root-path";
 import { morganMiddleware } from "./logger";
 import { winstonLogger } from "./logger";
+import csurf, { CookieOptions as CsurfCookieOptions } from "csurf";
 import figlet from "figlet";
+import cookieParser from "cookie-parser";
+import updateNotifier from "update-notifier";
+import favicon from "serve-favicon";
+import helmet, { HelmetOptions } from "helmet";
+import methodOverride from "method-override";
+import expressFileUpload from "express-fileupload";
+import rateLimit, { Options as RateLimitOptions } from "express-rate-limit";
+import cors from "cors";
+import session, {
+  SessionOptions as ExpressSessionOptions,
+} from "express-session";
+import compression from "compression";
+import responseTime from "response-time";
+// https://gist.github.com/rtgibbons/7354879
 
 export enum ViewEngine {
   HBS = "hbs",
@@ -18,10 +33,21 @@ export enum ViewEngine {
 
 export interface IOptions {
   appName?: string;
+  appSecret?: string;
   logDir?: string;
   viewDir?: string;
   viewEngine?: string;
   staticContentDir?: string;
+  fabIconPath?: string;
+  rateLimiter?: object | undefined;
+  session?: ExpressSessionOptions;
+  compression?: compression.CompressionOptions;
+  csrf?: {
+    value?: ((req: express.Request) => string) | undefined;
+    cookie?: csurf.CookieOptions | boolean | undefined;
+    ignoreMethods?: string[] | undefined;
+    sessionKey?: string | undefined;
+  };
 }
 
 export class ExpressApplication implements IMethods {
@@ -216,6 +242,89 @@ export class ExpressApplication implements IMethods {
     return this;
   }
 
+  public updateNotifier(packageJsonPath: string) {
+    const pkg = require("./package.json");
+    const notifier = updateNotifier({ pkg });
+    notifier.notify();
+
+    return this;
+  }
+  public addCookieParser() {
+    this.applicationSet("trust proxy", 1);
+    this.addMiddleware(cookieParser());
+    return this;
+  }
+
+  public addCsrf() {
+    let options = this.options.csrf;
+    if (!options) {
+      options = { cookie: true };
+    }
+    this.addMiddleware(csurf(options));
+    return this;
+  }
+
+  public addMethodOverwriteHeader() {
+    this.addMiddleware(methodOverride("X-HTTP-Method"));
+    this.addMiddleware(methodOverride("X-HTTP-Method-Override"));
+    this.addMiddleware(methodOverride("X-Method-Override"));
+    return this;
+  }
+
+  public addServerFavicon() {
+    const fabIcon = this.options.fabIconPath || "./public/images/favicon.ico";
+    this.addMiddleware(favicon(fabIcon));
+    return this;
+  }
+
+  public addHelmet(options?: HelmetOptions) {
+    this.addMiddleware(helmet(options));
+    return this;
+  }
+
+  public addFileUpload() {
+    this.addMiddleware(expressFileUpload());
+    return this;
+  }
+
+  public addRateLimiter() {
+    this.addMiddleware(rateLimit(this.options.rateLimiter));
+    return this;
+  }
+
+  public addCors() {
+    this.addMiddleware(cors());
+    return this;
+  }
+
+  public addSession() {
+    this.addMiddleware(session(this.options.session));
+    return this;
+  }
+
+  public addCompression() {
+    this.addMiddleware(compression(this.options.compression));
+    return this;
+  }
+
+  public addResponseTime() {
+    this.addMiddleware(responseTime());
+    return this;
+  }
+
+  public addDefaultMiddleware() {
+    this.addCookieParser()
+      .addJSONParser()
+      .addMethodOverwriteHeader()
+      .addHelmet()
+      .addCsrf()
+      .addCors()
+      .addCompression()
+      .addResponseTime();
+
+    return this;
+  }
+
   public addErrorHandler(
     handler: (
       err: any,
@@ -231,7 +340,7 @@ export class ExpressApplication implements IMethods {
   public startServerSync: Function = async (
     port: number = 3000
   ): Promise<ExpressApplication> => {
-    const serverListen = await this.application.listen(port);
+    const serverListen = await this.application.listen(port,'127.0.0.1');
     this.debugger(`Server listening on port ${port}`);
     const appName = `\n${this.options.appName || "ExpressApplication"}\n`;
     this.getLogger().info(figlet.textSync(appName));
