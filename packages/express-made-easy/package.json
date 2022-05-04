@@ -13,7 +13,7 @@
     "pac:publish": "zx ./scripts/publish.mjs",
     "test": "jest  --coverage",
     "example:ts": "ts-node ./example/ts/app.ts",
-    "example:js": "node ./example/ts/app.js"
+    "example:js": "node ./example/js/app.js"
   },
   "repository": {
     "type": "git",
