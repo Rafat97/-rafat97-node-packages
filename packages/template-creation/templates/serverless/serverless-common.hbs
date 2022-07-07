@@ -1,0 +1,36 @@
+####################################################################################
+# This file is use for share all the common variable across all the services.
+####################################################################################
+
+custom:
+  basic:
+    org: {{pascalCase orgName}}
+    app: {{pascalCase appName}}
+
+  common:
+    profiles:
+      dev: account-dev
+      prod: account-prod
+    stage: ${opt:stage, 'dev'}
+    region: ${opt:region, 'us-east-1'}
+
+  services:
+    TestResourceDynamoDB:
+      name: test-resource-dynamodb
+      description: "Test Table Resource for Dynamodb"
+    TestResourceApi:
+      name: test-api-service
+      description: "Test Api Service"
+
+
+  S3Bucket:
+    UploadBucket:
+      name: sample-bucker-1-${self:provider.stage}
+
+  DynamoDB:
+    TestTable:
+      name: test_table${self:provider.stage}
+      dev:
+        deletion_policy: Delete
+      prod:
+        deletion_policy: Retain

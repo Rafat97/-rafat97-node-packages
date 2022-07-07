@@ -1,0 +1,20 @@
+{
+  "name": "template-creation",
+  "version": "0.0.1",
+  "description": "Create template",
+  "main": "./index.js",
+  "scripts": {
+    "start": "plop"
+  },
+  "bin": {
+    "rafgen": "./index.mjs"
+  },
+  "preferGlobal": true,
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "commander": "^9.3.0",
+    "conf": "^10.1.2",
+    "plop": "^3.1.1"
+  }
+}

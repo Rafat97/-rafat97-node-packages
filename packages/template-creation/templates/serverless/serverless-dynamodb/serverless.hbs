@@ -1,0 +1,65 @@
+## sls deploy  --stage dev --region us-east-1  --version --verbose
+
+###### DON'T CHANGE THIS #######
+org: ${self:custom.basic.org}
+app: ${self:custom.basic.app}
+###### DON'T CHANGE THIS #######
+
+service: ${self:custom.services.{{serviceName}}.name}
+
+# configValidationMode: warn
+frameworkVersion: "3"
+
+provider:
+  name: "aws"
+  profile: ${self:custom.common.profiles.${sls:stage}}
+  stage: ${self:custom.common.stage}
+  region: ${self:custom.common.region}
+  environment:
+    {{ constantCase envVariable }}: ${file('../serverless-common.yml'):custom.DynamoDB.{{commonTableKey}}.name} 
+    DELETE_POLICY: ${file('../serverless-common.yml'):custom.DynamoDB.{{commonTableKey}}.${self:provider.stage}.deletion_policy}
+
+custom:
+  common: ${file('../serverless-common.yml'):custom.common}
+  basic: ${file('../serverless-common.yml'):custom.basic}
+  services: ${file('../serverless-common.yml'):custom.services}
+
+outputs:
+  app_name: ${self:app}
+  service_name: ${self:service}
+  stage: ${self:provider.stage}
+  region: ${self:provider.region}
+  {{ constantCase envVariable }}: ${self:provider.environment.{{constantCase envVariable}} }
+  DELETE_POLICY: ${self:provider.environment.DELETE_POLICY}
+
+resources:
+  Resources:
+    {{commonTableKey}}:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: ${self:provider.environment.DELETE_POLICY}
+      # DeleitionPolicy: Retain ## retain the table after delete all the resource. you must delete the table manually.
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.{{ constantCase envVariable }} }
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        AttributeDefinitions:
+          - AttributeName: "PK"
+            AttributeType: "S"
+          - AttributeName: "SK"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "PK"
+            KeyType: "HASH"
+          - AttributeName: "SK"
+            KeyType: "RANGE"
+  Outputs:
+    {{commonTableKey}}OutputName:
+      Description: "Output of dynamodb {{commonTableKey}} table name"
+      Value: !Ref {{commonTableKey}}
+    {{ commonTableKey }}OutputArn:
+      Description: "Output of dynamodb {{commonTableKey}} table arn"
+      Value: !GetAtt {{commonTableKey}}.Arn
+    {{commonTableKey}}OutputStreamArn:
+      Description: "Output of dynamodb {{commonTableKey}} table arn"
+      Value: !GetAtt {{commonTableKey}}.StreamArn
