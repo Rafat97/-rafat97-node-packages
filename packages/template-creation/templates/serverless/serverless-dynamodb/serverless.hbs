@@ -16,7 +16,7 @@ provider:
   stage: ${self:custom.common.stage}
   region: ${self:custom.common.region}
   environment:
-    {{ constantCase envVariable }}: ${file('../serverless-common.yml'):custom.DynamoDB.{{commonTableKey}}.name} 
+    {{ constantCase envVariable }}: ${file('../serverless-common.yml'):custom.DynamoDB.{{commonTableKey}}.name}
     DELETE_POLICY: ${file('../serverless-common.yml'):custom.DynamoDB.{{commonTableKey}}.${self:provider.stage}.deletion_policy}
 
 custom:
