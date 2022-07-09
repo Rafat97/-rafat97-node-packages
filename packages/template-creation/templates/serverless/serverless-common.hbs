@@ -18,6 +18,9 @@ custom:
     TestResourceDynamoDB:
       name: test-resource-dynamodb
       description: "Test Table Resource for Dynamodb"
+    TestResourceSQS:
+      name: test-resource-sqs
+      description: "Test sqs Resource for aws"
     TestResourceApi:
       name: test-api-service
       description: "Test Api Service"
@@ -34,3 +37,7 @@ custom:
         deletion_policy: Delete
       prod:
         deletion_policy: Retain
+
+  Queue:
+    TestQueue:
+      name: test_table${self:provider.stage}

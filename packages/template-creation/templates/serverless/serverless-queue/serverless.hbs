@@ -1,0 +1,74 @@
+## sls deploy  --stage dev --region us-east-1  --version --verbose
+
+###### DON'T CHANGE THIS #######
+org: ${self:custom.basic.org}
+app: ${self:custom.basic.app}
+###### DON'T CHANGE THIS #######
+
+service: ${self:custom.services.{{serviceName}}.name}
+
+# configValidationMode: warn
+frameworkVersion: "3"
+
+provider:
+  name: "aws"
+  profile: ${self:custom.common.profiles.${sls:stage}}
+  stage: ${self:custom.common.stage}
+  region: ${self:custom.common.region}
+  environment:
+    {{ constantCase envVariable }}: ${file('../serverless-common.yml'):custom.Queue.{{commonQueueKey}}.name}
+
+custom:
+  common: ${file('../serverless-common.yml'):custom.common}
+  basic: ${file('../serverless-common.yml'):custom.basic}
+  services: ${file('../serverless-common.yml'):custom.services}
+
+outputs:
+  app_name: ${self:app}
+  service_name: ${self:service}
+  stage: ${self:provider.stage}
+  region: ${self:provider.region}
+  {{ constantCase envVariable }}: ${self:provider.environment.{{constantCase envVariable}} }
+
+resources:
+  Resources:
+    {{commonQueueKey}}:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.environment.{{ constantCase envVariable }} }
+        RedrivePolicy:
+          deadLetterTargetArn:
+            Fn::GetAtt:
+              - "{{commonQueueKey}}DLQ"
+              - "Arn"
+          maxReceiveCount: 2
+
+    {{commonQueueKey}}DLQ:
+        Type: AWS::SQS::Queue
+        Properties:
+            QueueName: ${self:provider.environment.{{ constantCase envVariable }} }_DLQ
+
+
+
+  Outputs:
+    {{commonQueueKey}}QueueURL:
+      Description: "URL of source queue"
+      Value:
+        Ref: "{{commonQueueKey}}"
+    {{commonQueueKey}}QueueARN:
+      Description: "ARN of source queue"
+      Value:
+        Fn::GetAtt:
+          - "{{commonQueueKey}}"
+          - "Arn"
+    {{commonQueueKey}}DLQQueueURL:
+      Description: "URL of dead-letter queue"
+      Value:
+        Ref: "{{commonQueueKey}}DLQ"
+    {{commonQueueKey}}DLQQueueARN:
+      Description: "ARN of dead-letter queue"
+      Value:
+        Fn::GetAtt:
+          - "{{commonQueueKey}}DLQ"
+          - "Arn"
+
