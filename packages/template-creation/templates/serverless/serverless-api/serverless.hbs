@@ -1,0 +1,49 @@
+## sls deploy  --stage dev --region us-east-1  --version --verbose
+
+###### DON'T CHANGE THIS #######
+org: ${self:custom.basic.org}
+app: ${self:custom.basic.app}
+###### DON'T CHANGE THIS #######
+
+service: ${self:custom.services.{{serviceName}}.name}
+
+# configValidationMode: warn
+frameworkVersion: "3"
+
+provider:
+  name: "aws"
+  profile: ${self:custom.common.profiles.${sls:stage}}
+  memorySize: 256
+  timeout: 10
+  stage: ${self:custom.common.stage}
+  region: ${self:custom.common.region}
+
+  apiName: ${self:app}__${self:service}__rest_api_gateway__${sls:stage}
+  apiGateway:
+    description: API Gateway for app ${self:app} and service ${self:service} in stage ${sls:stage}
+
+package:
+  individually: true
+  patterns:
+    - "!**"
+
+custom:
+  common: ${file('../serverless-common.yml'):custom.common}
+  basic: ${file('../serverless-common.yml'):custom.basic}
+  services: ${file('../serverless-common.yml'):custom.services}
+
+plugins:
+  - serverless-iam-roles-per-function
+  - serverless-bundle
+  - serverless-offline
+
+outputs:
+  app_name: ${self:app}
+  service_name: ${self:service}
+  stage: ${self:provider.stage}
+  region: ${self:provider.region}
+  api_name: ${self:provider.apiName}
+
+
+resources:
+  Resources:
