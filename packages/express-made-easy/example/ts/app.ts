@@ -1,3 +1,4 @@
+console.log(process.env)
 import { ExpressApplication, IOptions, ViewEngine } from "../../src/index";
 import routerAPI from "./routes/api";
 import { routerTest } from "./routes/test";
@@ -31,7 +32,7 @@ const demoErrorHandler = (err: any, req: any, res: any, next: any) => {
     message: err.message,
     stack: err.stack,
   };
-  ExpressApplication.Logger(config.logDir).error(err);
+  ExpressApplication.Logger(config.log?.dir).error(err);
 
   console.log(err.message);
   res.status(500).json(error);
@@ -49,9 +50,8 @@ const config: IOptions = {
   appHost: "127.0.0.1",
   appPort: 3000,
   appSecret: "TestSecret1234",
-  logDir: `${__dirname}/extra/logs/`,
-  viewDir: `${__dirname}/views/`,
-  viewEngine: ViewEngine.HBS,
+  log: { dir: `${__dirname}/extra/logs/` },
+  view: { dir: `${__dirname}/views/`, engine: ViewEngine.HBS },
   staticContentDir: `${__dirname}/public/`,
   fabIconPath: `${__dirname}/public/images/favicon.png`,
   helmet: {
@@ -75,6 +75,8 @@ const config: IOptions = {
 };
 
 const expressApp = new ExpressApplication(config)
+  .addRequestID()
+  .addMorgan()
   .addMultipleMiddleware(mid1, mid2, mid1)
   .addCookieParser()
   .addResponseTime()

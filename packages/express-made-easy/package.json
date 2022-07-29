@@ -1,6 +1,6 @@
 {
   "name": "@rafat97/express-made-easy",
-  "version": "0.0.1-beta.0",
+  "version": "0.0.1-beta.1",
   "description": "Made Express Easy",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -12,8 +12,8 @@
     "build": "tsc",
     "pac:publish": "zx ./scripts/publish.mjs",
     "test": "jest  --coverage",
-    "example:ts": "ts-node ./example/ts/app.ts",
-    "example:js": "node ./example/js/app.js"
+    "example:ts": "set NODE_ENV=production&& ts-node ./example/ts/app.ts",
+    "example:js": "set NODE_ENV=production&& node ./example/js/app.js"
   },
   "repository": {
     "type": "git",
@@ -56,6 +56,7 @@
     "pug": "^3.0.2",
     "response-time": "^2.3.2",
     "serve-favicon": "^2.5.0",
+    "ulid": "^2.3.0",
     "update-notifier": "^5.1.0",
     "winston": "^3.7.2"
   },
@@ -63,7 +64,6 @@
   "devDependencies": {
     "@types/app-root-path": "^1.2.4",
     "@types/compression": "^1.7.2",
-    "@types/response-time": "^2.3.5",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
     "@types/csurf": "^1.11.2",
@@ -82,6 +82,7 @@
     "@types/method-override": "^0.0.32",
     "@types/morgan": "^1.9.3",
     "@types/pug": "^2.0.6",
+    "@types/response-time": "^2.3.5",
     "@types/serve-favicon": "^2.5.3",
     "@types/update-notifier": "^5.1.0",
     "@types/winston": "^2.4.4",

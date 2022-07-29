@@ -1,4 +1,6 @@
-import express, { Express } from "express";
+import morgan from "morgan";
+import express, { Express, NextFunction } from "express";
+import { ulid } from "ulid";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import { IMethods } from "./IMethods";
@@ -49,9 +51,16 @@ export interface IOptions {
   appHost?: string;
   appPort?: number;
   appSecret?: string;
-  logDir?: string;
-  viewDir?: string;
-  viewEngine?: string;
+  log?: {
+    enable?: boolean;
+    type?: string;
+    dir?: string;
+  };
+  view?: {
+    enable?: boolean;
+    dir?: string;
+    engine?: string;
+  };
   staticContentDir?: string;
   fabIconPath?: string;
   rateLimiter?: object | undefined;
@@ -87,11 +96,19 @@ export class ExpressApplication implements IMethods {
     this.application = express();
     this.options = options || {};
     this.debugger = debug(`${this.options.appName || "ExpressApplication"}`);
+    this.initOption(this.options);
 
-    // default support
-    this.addLogger();
+    // // default support
+    // this.addLogger();
 
     Object.setPrototypeOf(this, ExpressApplication.prototype);
+  }
+
+  private initOption(options: IOptions) {
+    const opt = options || {};
+    this.options = {
+      ...opt,
+    };
   }
 
   /**
@@ -100,7 +117,7 @@ export class ExpressApplication implements IMethods {
    * @returns ExpressApplication
    */
   private addLogger() {
-    const logDir = this.options.logDir || `${this.appPath}/logs/`;
+    const logDir = this.options.log?.dir || `${this.appPath}/logs/`;
     this.addMiddleware(morganMiddleware(logDir));
     return this;
   }
@@ -324,8 +341,12 @@ export class ExpressApplication implements IMethods {
   }
 
   private getLogger = () => {
-    const logDir = this.options.logDir || `${this.appPath}/logs/`;
-    return winstonLogger(logDir);
+    if (this.options.log?.enable) {
+      const logDir = this.options.log?.dir || `${this.appPath}/logs/`;
+      return winstonLogger(logDir);
+    } else {
+      return console;
+    }
   };
 
   /**
@@ -347,8 +368,8 @@ export class ExpressApplication implements IMethods {
    * @returns  ExpressApplication
    */
   public addView = () => {
-    const viewEngine = this.options.viewEngine || ViewEngine.HBS;
-    const viewDir = this.options.viewDir || `${this.appPath}/views/`;
+    const viewEngine = this.options.view?.engine || ViewEngine.HBS;
+    const viewDir = this.options.view?.dir || `${this.appPath}/views/`;
     this.applicationSet("views", viewDir);
     this.applicationSet("view engine", viewEngine);
     return this;
@@ -441,8 +462,55 @@ export class ExpressApplication implements IMethods {
     return this;
   };
 
+  public addMorgan = () => {
+    this.addMiddleware(morgan("combined"));
+    return this;
+  };
+
+  private getDurationInMilliseconds = (start: [number, number]) => {
+    const NS_PER_SEC = 1e9;
+    const NS_TO_MS = 1e6;
+    const diff = process.hrtime(start);
+
+    return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS;
+  };
+
+  public addRequestID = () => {
+    const TraceIDMiddleware = (
+      req: express.Request,
+      res: express.Response,
+      next: NextFunction
+    ) => {
+      const HEADER_NAME = "X-Request-Id";
+      const RequestID = ulid();
+      res.setHeader(HEADER_NAME, RequestID);
+      console.log("---------------------------");
+      console.log(`START RequestID - ${RequestID}`);
+      const start = process.hrtime();
+
+      res.on("finish", () => {
+        const durationInMilliseconds = this.getDurationInMilliseconds(start);
+        console.log(
+          `REQUEST FINISH RequestID - ${RequestID} Time take(s) - ${durationInMilliseconds}ms`
+        );
+      });
+
+      res.on("close", () => {
+        const durationInMilliseconds = this.getDurationInMilliseconds(start);
+        console.log(
+          `CONNECTION CLOSE RequestID - ${RequestID}, Time take(s) - ${durationInMilliseconds}ms`
+        );
+      });
+      next();
+    };
+    this.addMiddleware(TraceIDMiddleware);
+    return this;
+  };
+
   public addDefaultMiddleware = () => {
-    this.addCookieParser()
+    this.addRequestID()
+      .addMorgan()
+      .addCookieParser()
       .addJSONParser()
       .addMethodOverwriteHeader()
       .addHelmet()
@@ -465,12 +533,25 @@ export class ExpressApplication implements IMethods {
     return this;
   };
 
+  private serverListen = async (
+    port: number,
+    hostName: string
+  ): Promise<boolean> => {
+    return await new Promise<boolean>((resolve, reject) => {
+      this.application.listen(port, hostName, () => {
+        resolve(true);
+      });
+    });
+  };
+
   public startServerSync: Function = async (): Promise<ExpressApplication> => {
     const hostName = this.options.appHost || "127.0.0.1";
     const port = this.options.appPort || 3000;
-    const serverListen = await this.application.listen(port, hostName);
+    const serverListen = await this.serverListen(port, hostName);
+    if (serverListen) {
+    }
     this.debugger(`Server listening on port ${port}`);
-    const appName = `\n${this.options.appName || "ExpressApplication"}\n`;
+    const appName = `\n${this.options.appName || "Application"}\n`;
     this.getLogger().info(figlet.textSync(appName));
     this.getLogger().info(`Server listening on ${hostName}:${port}`);
     return this;
