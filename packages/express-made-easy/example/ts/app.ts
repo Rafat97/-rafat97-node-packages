@@ -1,6 +1,7 @@
 console.log(process.env)
 import { ExpressApplication, IOptions, ViewEngine } from "../../src/index";
 import routerAPI from "./routes/api";
+import routerErr from "./routes/err";
 import { routerTest } from "./routes/test";
 
 const mid1 = function (req: any, res: any, next: any) {
@@ -94,6 +95,7 @@ const expressApp = new ExpressApplication(config)
   .getMethod("/", demoGet)
   .router("/api", routerAPI)
   .router("/test", routerTest)
+  .router("/err", routerErr)
   .addErrorHandler(demoErrorHandler)
   .addMiddleware(demoRouterNotFound)
   .startServerSync();

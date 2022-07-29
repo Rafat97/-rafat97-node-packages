@@ -24,6 +24,7 @@ import session, {
 } from "express-session";
 import compression from "compression";
 import responseTime from "response-time";
+import "express-async-errors";
 // https://gist.github.com/rtgibbons/7354879
 
 /**
