@@ -3,3 +3,6 @@ scripts/
 __tests__/
 coverage/
 package-lock.json
+tsconfig.json
+jest.config.ts
+example/
