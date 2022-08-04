@@ -485,21 +485,21 @@ export class ExpressApplication implements IMethods {
       const HEADER_NAME = "X-Request-Id";
       const RequestID = ulid();
       res.setHeader(HEADER_NAME, RequestID);
-      console.log("---------------------------");
-      console.log(`START RequestID - ${RequestID}`);
+      process.stdout.write("---------------------------\n");
+      process.stdout.write(`START RequestID - ${RequestID}\n`);
       const start = process.hrtime();
 
       res.on("finish", () => {
         const durationInMilliseconds = this.getDurationInMilliseconds(start);
-        console.log(
-          `REQUEST FINISH RequestID - ${RequestID} Time take(s) - ${durationInMilliseconds}ms`
+        process.stdout.write(
+          `REQUEST FINISH RequestID - ${RequestID} Time take(s) - ${durationInMilliseconds}ms\n`
         );
       });
 
       res.on("close", () => {
         const durationInMilliseconds = this.getDurationInMilliseconds(start);
-        console.log(
-          `CONNECTION CLOSE RequestID - ${RequestID}, Time take(s) - ${durationInMilliseconds}ms`
+        process.stdout.write(
+          `CONNECTION CLOSE RequestID - ${RequestID}, Time take(s) - ${durationInMilliseconds}ms\n`
         );
       });
       next();
@@ -553,8 +553,8 @@ export class ExpressApplication implements IMethods {
     }
     this.debugger(`Server listening on port ${port}`);
     const appName = `\n${this.options.appName || "Application"}\n`;
-    this.getLogger().info(figlet.textSync(appName));
-    this.getLogger().info(`Server listening on ${hostName}:${port}`);
+    process.stdout.write(figlet.textSync(appName) + "\n");
+    process.stdout.write(`Server listening on ${hostName}:${port}\n`);
     return this;
   };
 }

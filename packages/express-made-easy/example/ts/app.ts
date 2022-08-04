@@ -1,8 +1,13 @@
-console.log(process.env)
+import {
+  IWinstonLoggerOptions,
+  WinstonLogger,
+} from "./../../src/express/utils/WLogger";
+console.log(process.env);
 import { ExpressApplication, IOptions, ViewEngine } from "../../src/index";
 import routerAPI from "./routes/api";
 import routerErr from "./routes/err";
 import { routerTest } from "./routes/test";
+import expressWinston, { LoggerOptions } from "express-winston";
 
 const mid1 = function (req: any, res: any, next: any) {
   console.log("mid1");
@@ -33,16 +38,15 @@ const demoErrorHandler = (err: any, req: any, res: any, next: any) => {
     message: err.message,
     stack: err.stack,
   };
-  ExpressApplication.Logger(config.log?.dir).error(err);
-
-  console.log(err.message);
+  // ExpressApplication.Logger(config.log?.dir).error(err);
+  console.error(err);
+  console.error(err.message);
   res.status(500).json(error);
 };
 
 const demoRouterNotFound = function (req: any, res: any, next: any) {
   res.status(404);
-
-  console.log("Not found");
+  console.error("demoRouterNotFound: Not found");
   res.json({ error: "Not found" });
 };
 
@@ -75,7 +79,39 @@ const config: IOptions = {
   csrf: { cookie: true },
 };
 
+const loggerOption: IWinstonLoggerOptions = {
+  appName: config.appName,
+  isEnablePrintRestOfTheObject: true,
+};
+
+const expressWinstonOptions: LoggerOptions = {
+  winstonInstance: new WinstonLogger(loggerOption).overrideConsoleLogger(),
+  level: function (req: any, res: any) {
+    var level = "";
+    if (res.statusCode >= 100) {
+      level = "info";
+    }
+    if (res.statusCode >= 400) {
+      level = "warn";
+    }
+    if (res.statusCode >= 500) {
+      level = "error";
+    }
+    if (res.statusCode == 401 || res.statusCode == 403) {
+      level = "critical";
+    }
+    return level;
+  },
+  ignoreRoute: function (req: any, res: any) {
+    if (req.url === "/v1/health") {
+      return true;
+    }
+    return false;
+  },
+};
+
 const expressApp = new ExpressApplication(config)
+  .addMiddleware(expressWinston.logger(expressWinstonOptions))
   .addRequestID()
   .addMorgan()
   .addMultipleMiddleware(mid1, mid2, mid1)

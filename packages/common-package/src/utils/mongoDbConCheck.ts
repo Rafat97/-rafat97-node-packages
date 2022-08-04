@@ -34,3 +34,27 @@ export const mongoDBConnectionCheckSync = async (connecTionString: string) => {
   }
   return isConnected;
 };
+
+/**
+ * 0 = disconnected
+ * 1 = connected
+ * 2 = connecting
+ * 3 = disconnecting
+ *
+ * https://mongoosejs.com/docs/api/connection.html#connection_Connection-readyState
+ *
+ */
+export const mongoDBStatusCheck = () => {
+  const readyState = mongoose.connection.readyState;
+  if (readyState === 0) {
+    return "MONGO_DISCONNECTED";
+  } else if (readyState === 1) {
+    return "MONGO_CONNECTED";
+  } else if (readyState === 2) {
+    return "MONGO_CONNECTING";
+  } else if (readyState === 3) {
+    return "MONGO_DISCONNECTING";
+  } else {
+    return "MONGO_UNKNOWN_READYSTATE_" + readyState;
+  }
+};
